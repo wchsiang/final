@@ -105,6 +105,7 @@ $result = $stmt->get_result();
 $results = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
+        $row["table_info"] = $table_info;
         $results[] = $row;
     }
 }
