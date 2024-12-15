@@ -375,7 +375,9 @@ function printOption(result){
     result.forEach(r => {
         let lecture = document.createElement('div');
         lecture.className = 'lecture-btn';
-        // console.log(r);
+        lecture.onclick = function() {
+            show_pop(this, true);
+        };
         lecture.setAttribute('data-content', JSON.stringify(r));
         const lecture_name = document.createElement('p');
         lecture_name.className = 'first_line';
@@ -403,31 +405,7 @@ function printOption(result){
         lectures.appendChild(lecture);
         
     })
-    console.log(result);                 
-    let lectureButtons = document.querySelectorAll('.lecture-btn');
-    lectureButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const lecture_info = JSON.parse(button.getAttribute('data-content'));
-            console.log(lecture_info);
-            document.getElementById("overlay").style.display = "flex";
-            let popup_body = document.getElementById("popup");
-            popup_body.innerHTML = "<span id='close' onclick='close_popup()'>X</span>";
-            popup_body.innerHTML += "<div class='popup_body'>課程名稱：" + lecture_info.cos_name 
-                + `&nbsp;<span class='brief' onclick='brief_pop(${lecture_info.cos_id})'>課程綱要</span><br>`
-                + "課程代號：" + lecture_info.cos_id + "<br>"
-                + "摘要：" + lecture_info.brief + "<br>"
-                + "開課教師：" + lecture_info.teacher + "<br>"
-                + "開課時間：" + lecture_info.cos_time + "<br>"
-                + "人數上限：" + lecture_info.num_limit + "<br>"
-                + "修課別：" + lecture_info.cos_type + "<br>"
-                + "修課時數：" + lecture_info.cos_hours + "<br>"
-                + "學分數：" + lecture_info.cos_credit + "<br>"
-                + "備註：" + lecture_info.memo + "<br>"
-                + "</div>"
-                + "<div class='popup_footer'><button onclick='add_course()'>加入課表</button></div>";
-        });
-    });
-    console.log(lectureButtons);
+    console.log(result);
 }
 
 // 回上一頁功能
