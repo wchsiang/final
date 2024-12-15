@@ -1,3 +1,10 @@
+<?php
+    if(!isset($_COOKIE['student_id'])){
+        header("Location: login.php");
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
