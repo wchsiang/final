@@ -65,7 +65,8 @@ toggleBtns.forEach((btn, index) => {
 document.addEventListener('click', (event) => {
     if (!event.target.classList.contains('right-btn') && 
         !event.target.closest('.sidebar') && 
-        !event.target.closest('#overlay')) {
+        !event.target.closest('#overlay') &&
+        !event.target.classList.contains('cell')) {
         closeAllSidebars();
         activeIndex = null; // 重置狀態
     }
@@ -304,35 +305,74 @@ function show_pop(course, isAdd){
         + "備註：" + lecture_info.memo + "<br>"
         + "</div>"
     if(isAdd)
-        popup_body.innerHTML += `<div class='popup_footer'><button onclick='add_course("${lecture_info.cos_id}","${lecture_info.cos_time}")'>加入課表</button></div>`;
+        popup_body.innerHTML += `<div class='popup_footer'><button onclick='add_course(${JSON.stringify(lecture_info)})'>加入課表</button></div>`;
+    else
+        popup_body.innerHTML += `<div class='popup_footer'><button onclick='remove_course(${JSON.stringify(lecture_info)})'>移出課表</button></div>`;
 }
 function brief_pop(cos_id){
     window.open(`https://timetable.nycu.edu.tw/?r=main/crsoutline&Acy=113&Sem=2&CrsNo=${cos_id}&lang=zh-tw`, '_blank');
 }
 
-function add_course(cos_name, cos_time){
-    const pattern = /([MTWRFSU])([zy1234n56789abcd])-/g;  // 匹配格式： "M56-", "R2-"
-    let matches = [];
-
+function add_course(cos_info){
+    close_popup();
+    const pattern = /([MTWRFSU])([zy1234n56789abcd]+)-?/g;
+    let matches = new Set();;
     let match;
-    while ((match = pattern.exec(cos_time)) !== null) {
+    while ((match = pattern.exec(cos_info.cos_time)) !== null) {
         const dayCode = match[1];        // 星期代碼
         const number = match[2];          // 時間段數字
-
         // 將星期代碼轉換為縮寫
         const dayIndex = "MTWRFSU".indexOf(dayCode);
         const day = days[dayIndex];
-
+    
         // 將時間段代碼轉換為對應的數字
-        const timeIndex = "zy1234n56789abcd".indexOf(number);
-        const timeNumber = times[timeIndex]; // 合併數字
-
-        matches.push(`${day}${timeNumber}`);
+        for(let i = 0; i < number.length; i++){
+            let timeIndex  = "zy1234n56789abcd".indexOf(number[i]);
+            let timeNumber = times[timeIndex]
+            matches.add(`${day}${timeNumber}`);
+        }        
     }
+    console.log(cos_info);
+    matches.forEach(match => {
+        const base = document.getElementById(match);
+        const cell = document.createElement('span');
+        cell.className = 'cell';
+        cell.classList.add(`cos_id_${cos_info.cos_id}`);
+        cell.setAttribute('data-content', JSON.stringify(cos_info));
+        cell.onmouseenter = function() {
+            mouse_enter(cos_info.cos_id);
+        };
+        cell.onmouseleave = function() {
+            mouse_leave(cos_info.cos_id);
+        };
+        cell.onclick = function() {
+            show_pop(this, false);
+        }
+        cell.style.height = `${base.offsetHeight}px`;
+        cell.style.width = `${base.offsetWidth}px`;
+        let lines = cos_info.cos_name.split('\n');
+        let name = lines[0];
+        if(name.length > 10){
+            name = lines[0].substring(0,10) + "...";
+        }
+        cell.textContent = name;
+        base.appendChild(cell);
+    });
+}
 
-    console.log(matches);
-    // const cell = document.getElementById()
-    // console.log("hi");
+function remove_course(cos_info){
+
+}
+function mouse_enter(cos_id){
+    document.querySelectorAll(`.cos_id_${cos_id}`).forEach(cell =>{
+        cell.classList.add('hover');
+    })
+}
+
+function mouse_leave(cos_id){
+    document.querySelectorAll(`.cos_id_${cos_id}`).forEach(cell =>{
+        cell.classList.remove('hover');
+    })
 }
 
 function close_popup(){

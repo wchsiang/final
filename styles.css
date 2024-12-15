@@ -421,3 +421,19 @@ h1 {
     border-color: transparent;
     color: #fff;   
 }
+
+.cell {
+    position: absolute;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #586470;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+}
+
+.cell.hover{
+    transform: scale(1.1);
+    z-index: 2;
+}
