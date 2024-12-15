@@ -16,6 +16,10 @@
     <div id="sidebar-container">
         <div class="right-btn active" id="toggle-btn1">1</div>
         <div class="sidebar" id="sidebar1">
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="輸入課程關鍵字or課號">
+                <img src="img/search.png" onclick="confirmSearch()" id="search-btn">
+            </div>
             <div id="back-rst-btn-grid" style="display: none;">
                 <img src="img/back.png" alt="Back" class="back-rst-btn" id="back-btn">
                 <img src="img/home.png" alt="Restart" class="back-rst-btn" id="restart-btn">

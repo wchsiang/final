@@ -197,6 +197,33 @@ h1 {
     padding: 10px;
 }
 
+#search-container{
+    display: flex;
+    gap: 20px;
+    justify-content: center; /* 水平方向居中 */
+    align-items: center;
+    padding: 10px;
+    height: 60px;
+    margin: 10px;
+}
+
+#search-btn{
+    cursor: pointer;
+    height: 60px;
+    width: 60px;
+    transition: transform 0.5s ease;
+}
+
+#search-input {
+    width: 80%;
+    height: 60%;
+    justify-content: center; /* 水平方向居中 */
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+}
+
 .back-rst-btn {
     justify-content: center; /* 水平方向居中 */
     align-items: center;
@@ -204,6 +231,10 @@ h1 {
     height: 60px;
     width: 60px;
     transition: transform 0.5s ease;
+}
+
+#search-btn:hover{
+    transform: scale(1.1);
 }
 
 .back-rst-btn:hover {
