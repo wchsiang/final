@@ -4,13 +4,13 @@ require_once 'db.php';
 $keyword = $_POST['data'];
 
 $queries = [
-    "SELECT * FROM course_info_1 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%'",
-    "SELECT * FROM course_info_2 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%'",
-    "SELECT * FROM course_info_3 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%'",
-    "SELECT * FROM course_info_4 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%'",
-    "SELECT * FROM course_info_5 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%'",
-    "SELECT * FROM course_info_6 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%'",
-    "SELECT * FROM course_info_7 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%'"
+    "SELECT * FROM course_info_1 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%' OR cos_time LIKE '%$keyword%'",
+    "SELECT * FROM course_info_2 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%' OR cos_time LIKE '%$keyword%'",
+    "SELECT * FROM course_info_3 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%' OR cos_time LIKE '%$keyword%'",
+    "SELECT * FROM course_info_4 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%' OR cos_time LIKE '%$keyword%'",
+    "SELECT * FROM course_info_5 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%' OR cos_time LIKE '%$keyword%'",
+    "SELECT * FROM course_info_6 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%' OR cos_time LIKE '%$keyword%'",
+    "SELECT * FROM course_info_7 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%' OR cos_time LIKE '%$keyword%'"
 ];
 
 $results = [];

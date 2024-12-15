@@ -3,7 +3,7 @@ const timetableGrid = document.getElementById('timetable-grid');
 
 // 定義時間段和星期
 const times = ['Y', 'Z', '1', '2', '3', '4', 'N', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D'];
-let days = ['MON.', 'TUE.', 'WED.', 'THU.', 'FRI.', 'SAT.', 'SUN.'];
+let days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 // 生成課表標題列
 let headerRow = document.createElement('div');
 headerRow.classList.add('row');
@@ -315,15 +315,24 @@ function add_course(cos_info){
             let timeIndex  = "zy1234n56789abcd".indexOf(number[i]);
             let timeNumber = times[timeIndex]
             matches.add(`${day}${timeNumber}`);
-        }        
+        }
     }
     console.log(cos_info);
     matches.forEach(match => {
+        const elements = document.querySelectorAll(`.cosT${match}`);
+        const count = elements.length;
         const base = document.getElementById(match);
         const cell = document.createElement('span');
-        cell.className = 'cell';
+        cell.classList.add(`cosT${match}`);
         cell.classList.add(`cos_id_${cos_info.cos_id}`);
+        cell.classList.add('float_course');
         cell.setAttribute('data-content', JSON.stringify(cos_info));
+        cell.style.bottom = `${0+count*10}%`;
+        cell.style.left = `${0+count*5}%`;
+        if (count % 2 === 1){
+            cell.style.backgroundColor = 'rgb(99, 70, 179)';
+        }else
+            cell.style.backgroundColor = 'rgb(64, 168, 171)';
         cell.onmouseenter = function() {
             mouse_enter(cos_info.cos_id);
         };
@@ -333,8 +342,6 @@ function add_course(cos_info){
         cell.onclick = function() {
             show_pop(this);
         }
-        cell.style.height = `${base.offsetHeight}px`;
-        cell.style.width = `${base.offsetWidth}px`;
         let lines = cos_info.cos_name.split('\n');
         let name = lines[0];
         if(name.length > 10){
@@ -368,9 +375,11 @@ function remove_course(cos_info){
     printSelect(selected_course)
     close_popup();
 }
+
 function mouse_enter(cos_id){
     document.querySelectorAll(`.cos_id_${cos_id}`).forEach(cell =>{
         cell.classList.add('hover');
+        // cell.style.display = 'flex';
     })
 }
 
