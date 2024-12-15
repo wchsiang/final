@@ -315,6 +315,9 @@ function brief_pop(cos_id){
 //         document.getElementById("overlay").style.display = "display";
 //     });
 // });
+function add_course(){
+    console.log("hi");
+}
 
 function close_popup(){
     document.getElementById("overlay").style.display = "none";
