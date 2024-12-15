@@ -270,15 +270,20 @@ function close_popup(){
 }
 
 function confirmSearch(){
-    // TODO
-    const req = document.getElementById("search-input");
-    let keyword = req.textContent;
+    const keyword = document.getElementById("search-input").value;
+    if (keyword == "")
+        return;
+    sidebars[0].classList.remove('active');
+    sidebars[1].classList.add('active');
+    toggleBtns[0].classList.remove('active');
+    toggleBtns[1].classList.add('active');
+    activeIndex = 1;
     fetch('keyword.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: 'data=' + encodeURIComponent(selectedOption)
+        body: 'data=' + encodeURIComponent(keyword)
     })
     .then(response => response.json())
     .then(result => {
@@ -371,5 +376,4 @@ restartBtn.addEventListener('click', () => {
     searchInput.style.display = "flex";
 });
 
-// 初始化
 updateOptions(initoptions);
