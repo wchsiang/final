@@ -12,12 +12,12 @@ if ($stmt->execute()) {
     $results = [];
     while ($row = $result->fetch_assoc()) {
         $results[] = $row;
-        var_dump($row);
-        echo "<br>";
+        // var_dump($row);
+        // echo "<br>";
     }
     // var_dump($results);
     $final_results = [];
-    echo "<br><br>";
+    // echo "<br><br>";
     foreach($results as $param){   
         $cos_id =  $param['cos_id'];
         $category = $param['category'] ?? '';
@@ -74,16 +74,20 @@ if ($stmt->execute()) {
         if ($final_result->num_rows > 0) {
             while ($row = $final_result->fetch_assoc()) {
                 $final_results[] = $row;
-                var_dump($row);
-                echo "<br>";
+                // var_dump($row);
+                // echo "<br>";
             }
         }
-    }
+    }    
     // var_dump($final_results);
-    // exit();
+    header('Content-Type: application/json');
+    $json_results = json_encode($final_results);
+    if ($json_results === false) {
+        echo json_encode(array("error" => "Failed to encode JSON"));
+    } else {
+        echo $json_results;
+    }
 } else {
     $message = "Error: " . $stmt->error;
-    echo $message;
-    // exit();
 }
 ?>

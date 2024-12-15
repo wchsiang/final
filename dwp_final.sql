@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-12-15 07:38:08
+-- 產生時間： 2024-12-15 17:40:15
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -8087,8 +8087,39 @@ INSERT INTO `course_info_7` (`cos_name`, `cos_id`, `brief`, `num_limit`, `cos_ti
 CREATE TABLE `students` (
   `student_id` int(11) NOT NULL,
   `student_name` varchar(100) DEFAULT NULL,
-  `hashed_password` varchar(255) DEFAULT NULL
+  `password` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `students`
+--
+
+INSERT INTO `students` (`student_id`, `student_name`, `password`) VALUES
+(111550030, 'abc', '$2y$10$j.Ql/VYhaTNF.eRBMKhyj.Q9i5QAabzlcLyXbhUV0V04EmypsIn5e');
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `students_cos`
+--
+
+CREATE TABLE `students_cos` (
+  `student_id` int(11) NOT NULL,
+  `cos_id` int(11) NOT NULL,
+  `category` char(255) NOT NULL,
+  `college` char(255) NOT NULL,
+  `dep` char(255) NOT NULL,
+  `table_info` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `students_cos`
+--
+
+INSERT INTO `students_cos` (`student_id`, `cos_id`, `category`, `college`, `dep`, `table_info`) VALUES
+(111550030, 112253, '一般學士班', '校級', '(學士班大一大二不分系)\n', 1),
+(111550030, 112510, '一般學士班', '校級', '(學士班大一大二不分系)\r', 1),
+(111550030, 599000, '', '', '', 7);
 
 --
 -- 已傾印資料表的索引
@@ -8141,6 +8172,12 @@ ALTER TABLE `course_info_7`
 --
 ALTER TABLE `students`
   ADD PRIMARY KEY (`student_id`);
+
+--
+-- 資料表索引 `students_cos`
+--
+ALTER TABLE `students_cos`
+  ADD PRIMARY KEY (`student_id`,`cos_id`,`category`,`college`,`dep`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

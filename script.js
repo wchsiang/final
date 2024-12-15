@@ -253,6 +253,22 @@ const updateOptions = (newOptions, parentPath = "") => {
 };
 
 let selected_course = new Map();
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('get_from_database.php')
+    .then(response => response.json())
+    .then(result => {
+        selected_course.clear();
+        result.forEach(element => {
+            selected_course.set(element.cos_id, element);
+        });
+        printSelect(selected_course);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+});
+
 function show_pop(course){
     const lecture_info = JSON.parse(course.getAttribute('data-content'));
     console.log(lecture_info);
