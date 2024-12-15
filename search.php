@@ -112,7 +112,7 @@ if ($result->num_rows > 0) {
 $stmt->close();
 $conn->close();
 header('Content-Type: application/json');
-$results["table_info"] = $table_info;
+// $results["table_info"] = $table_info;
 $json_results = json_encode($results);
 if ($json_results === false) {
     echo json_encode(array("error" => "Failed to encode JSON"));
