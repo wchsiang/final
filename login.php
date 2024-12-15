@@ -20,6 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: index.php");
             exit();
         }
+        else{
+            $message = "Wrong password!";
+            echo "<script type='text/javascript'>
+                alert('$message');
+                window.location.href = 'login_index.php';
+            </script>";
+            exit();
+        }
     }
     else{
         $message = "No user found with that id!";
@@ -27,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             alert('$message');
             window.location.href = 'login_index.php';
         </script>";
+        exit();
     }
 }
 ?>

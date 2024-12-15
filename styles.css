@@ -84,16 +84,17 @@ h1 {
 .right-btn {
     position: fixed;
     transform: translateY(-50%);
-    left: -40px; /* Initially outside the screen */
+    /* transform: translateX(-50%); */
+    left: -12px; /* Initially outside the screen */
     background-color: rgb(100, 100, 100);
     color: white;
     border: 2px solid #ccc;
     border-radius: 10%;
-    width: 60px;
+    width: 40px;
     height: 80px;
     display: flex;
-    justify-content: right;
-    padding-right: 10px;
+    justify-content: center;
+    padding: 0 10px;
     align-items: center;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -117,7 +118,7 @@ h1 {
 .sidebar {
     position: fixed;
     top: 0;
-    left: -350px;
+    left: -340px;
     width: 300px;
     height: 100%;
     background-color: #333;
@@ -138,7 +139,7 @@ h1 {
 }
 
 .right-btn.open {
-    left: 300px;
+    left: 330px;
 }
 
 .right-btn.active{
@@ -512,5 +513,10 @@ h1 {
         color: white;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加陰影 */
         font-size: 0.6rem;
+    }
+    .right-btn{        
+        font-size: 0.5rem;
+        width: 20px;
+        height: 70px;
     }
 }

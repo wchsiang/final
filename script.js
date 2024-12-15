@@ -65,7 +65,7 @@ document.addEventListener('click', (event) => {
     if (!event.target.classList.contains('right-btn') && 
         !event.target.closest('.sidebar') && 
         !event.target.closest('#overlay') &&
-        !event.target.classList.contains('cell')) {
+        !event.target.classList.contains('float_course')) {
         closeAllSidebars();
         activeIndex = null; // 重置狀態
     }
@@ -261,6 +261,7 @@ document.addEventListener("DOMContentLoaded", function() {
         selected_course.clear();
         result.forEach(element => {
             selected_course.set(element.cos_id, element);
+            add_course(element);
         });
         printSelect(selected_course);
     })
@@ -288,7 +289,7 @@ function show_pop(course){
         + "備註：" + lecture_info.memo + "<br>"
         + "</div>"
     if(selected_course.has(lecture_info.cos_id))
-        popup_body.innerHTML += `<div class='popup_footer'><button onclick='remove_course(${JSON.stringify(lecture_info)})'>移出課表</button></div>`;
+        popup_body.innerHTML += `<div class='popup_footer'><button onclick='remove_course(${JSON.stringify(lecture_info)}); remove_from_database(${JSON.stringify(lecture_info)})'>移出課表</button></div>`;
     else
         popup_body.innerHTML += `<div class='popup_footer'><button onclick='add_course(${JSON.stringify(lecture_info)}); add_to_database(${JSON.stringify(lecture_info)})'>加入課表</button></div>`;
 }
@@ -355,6 +356,24 @@ function add_course(cos_info){
 function add_to_database(cos_info){
     console.log("cos_info: ", JSON.stringify(cos_info));
     fetch('add_to_database.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cos_info)
+    })
+    .then(response => response.text())
+    .then(result => {
+        console.log(result);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
+
+function remove_from_database(cos_info){
+    console.log("cos_info: ", JSON.stringify(cos_info));
+    fetch('remove_from_database.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

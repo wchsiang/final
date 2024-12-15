@@ -1,6 +1,6 @@
 <?php
     if(!isset($_COOKIE['student_id'])){
-        header("Location: login.php");
+        header("Location: login_index.php");
         exit();
     }
 ?>
@@ -21,7 +21,7 @@
     </div>
 
     <div id="sidebar-container">
-        <div class="right-btn active" id="toggle-btn1">1</div>
+        <div class="right-btn active" id="toggle-btn1">搜尋</div>
         <div class="sidebar" id="sidebar1">
             <div id="search-container">
                 <input type="text" id="search-input" placeholder="輸入課程關鍵字or課號">
@@ -34,12 +34,12 @@
             <div class="options" id="options"></div> 
         </div>
 
-        <div class="right-btn" id="toggle-btn2">2</div>
+        <div class="right-btn" id="toggle-btn2">結果</div>
         <div class="sidebar" id="sidebar2">
             <div class="lectures" id="lectures"></div> 
         </div>
 
-        <div class="right-btn" id="toggle-btn3">3</div>
+        <div class="right-btn" id="toggle-btn3">課表</div>
         <div class="sidebar" id="sidebar3">
             <div class="selects" id="selects"></div> 
         </div>

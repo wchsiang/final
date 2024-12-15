@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="login.css">
-    <title>>HW5_111550048_温竣翔</title>
+    <title>login</title>
 </head>
 <body>
     <div class="container">
@@ -13,7 +13,7 @@
             <div class="welcome-text">
                 <h1>WELCOME<br/>BACK!</h1>
             </div>
-            <form action="login.php" method="POST">
+            <form class="login-form" action="login.php" method="POST">
                 <input type="hidden" name="action" value="login">
                 <h2>Login</h2>
                 <div class="input-group">
@@ -36,7 +36,7 @@
 
 
         <div class="form-container signup">
-            <form action="register.php" method="POST">
+            <form class="register-form" action="register.php" method="POST">
                 <input type="hidden" name="action" value="register">
                 <h2>Sign Up</h2>
                 <div class="input-group">
