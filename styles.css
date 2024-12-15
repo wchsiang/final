@@ -8,8 +8,11 @@ body {
 }
 
 #timetable-container {
+    justify-content: center;
+    align-items: center;
     text-align: center;
     background-color: #d1d5da;
+    display: block;
     padding: 20px;
     margin: 20px auto;
     width: 60vw;
@@ -21,13 +24,13 @@ body {
 h1 {
     font-size: 2rem;
     color: #6c7a89;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
 }
 
 #timetable-grid {
     display: grid;
-    height: 90%;
+    height: 80%;
     width: 100%;
     grid-template-columns: 5% repeat(7, 1fr); 
     gap: 1%;
@@ -35,6 +38,8 @@ h1 {
 
 .row {
     display: contents;
+    width: 100%;
+    height: 10vh;
 }
 
 .header {
@@ -65,7 +70,7 @@ h1 {
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
-    height: 100%;
+    height: 7vh;
     transition: background-color 0.2s ease;
 }
 
@@ -323,7 +328,7 @@ h1 {
     color: black;
     padding: 20px;
     width: 450px;
-    height: 400px;
+    /* height: 400px; */
     overflow: auto;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
@@ -358,14 +363,11 @@ h1 {
 }
 
 .popup_footer {
-    position: absolute;
-    bottom: 3%;
     right: 5%;
     display: flex; /* 使用 Flexbox */
     justify-content: flex-end; /* 將內容對齊到右側 */
     align-items: center; /* 垂直置中對齊 */
     width: 100%; /* 確保佔據全寬 */
-    padding: 10px; /* 添加內邊距以改善視覺效果 */
 }
 
 .popup_footer button {
@@ -375,7 +377,6 @@ h1 {
     padding: 10px 15px;
     border-radius: 25px;
     border: none;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     animation: floating 2s infinite ease-in-out;
     transition: all 0.3s;
 }
@@ -420,4 +421,48 @@ h1 {
     background-color: #00d1b2;
     border-color: transparent;
     color: #fff;   
+}
+
+@media (min-device-width : 320px) and (max-device-width : 480px) {
+    #timetable-container {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-color: #d1d5da;
+        display: block;
+        padding: 20px;
+        margin: 10px auto;
+        width: 85vw;
+        height: 120vh;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.6rem;
+        font-weight: bold;
+        background-color: #6c7a89;
+        color: white;
+        border-radius: 5px;
+    }
+    .time-cell {
+        display: flex;              
+        justify-content: center;
+        align-items: center;
+        font-size: 0.4rem;
+        font-weight: bold;
+        background-color: #6c7a89;
+        color: white;
+        border-radius: 5px;
+        height: 3vh;
+    }
+    .day-cell {
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        height: 5vh;
+        transition: background-color 0.2s ease;
+    }
 }

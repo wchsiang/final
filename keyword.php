@@ -1,10 +1,8 @@
 <?php
 require_once 'db.php';
 
+$keyword = $_POST['data'];
 
-$keyword = $_POST['data']; // 從前端接收到的搜尋關鍵字"袁賢";
-
-// 查詢各個表格
 $queries = [
     "SELECT * FROM course_info_1 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%'",
     "SELECT * FROM course_info_2 WHERE cos_name LIKE '%$keyword%' OR cos_id LIKE '%$keyword%' OR teacher LIKE '%$keyword%'",
@@ -29,7 +27,6 @@ foreach ($queries as $query) {
     }
 }
 
-// 去除重複的 cos_id
 $uniqueResults = [];
 $seen = [];
 foreach ($results as $result) {

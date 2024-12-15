@@ -3,12 +3,11 @@ const timetableGrid = document.getElementById('timetable-grid');
 
 // 定義時間段和星期
 const times = ['Y', 'Z', '1', '2', '3', '4', 'N', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D'];
-const days = ['MON.', 'TUE.', 'WED.', 'THU.', 'FRI.', 'SAT.', 'SUN.'];
-
+let days = ['MON.', 'TUE.', 'WED.', 'THU.', 'FRI.', 'SAT.', 'SUN.'];
 // 生成課表標題列
 let headerRow = document.createElement('div');
 headerRow.classList.add('row');
-headerRow.innerHTML = `<div class="header"></div>`; // 空白的第一格
+headerRow.innerHTML = `<div class=""></div>`; // 空白的第一格
 days.forEach(day => {
     headerRow.innerHTML += `<div class="header">${day}</div>`;
 });
@@ -270,7 +269,7 @@ function close_popup(){
 }
 
 function confirmSearch(){
-    const keyword = document.getElementById("search-input").value;
+    const keyword = document.querySelector("#search-input").value;
     if (keyword == "")
         return;
     sidebars[0].classList.remove('active');
