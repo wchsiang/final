@@ -423,46 +423,19 @@ h1 {
     color: #fff;   
 }
 
-@media (min-device-width : 320px) and (max-device-width : 480px) {
-    #timetable-container {
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        background-color: #d1d5da;
-        display: block;
-        padding: 20px;
-        margin: 10px auto;
-        width: 85vw;
-        height: 120vh;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .header {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 0.6rem;
-        font-weight: bold;
-        background-color: #6c7a89;
-        color: white;
-        border-radius: 5px;
-    }
-    .time-cell {
-        display: flex;              
-        justify-content: center;
-        align-items: center;
-        font-size: 0.4rem;
-        font-weight: bold;
-        background-color: #6c7a89;
-        color: white;
-        border-radius: 5px;
-        height: 3vh;
-    }
-    .day-cell {
-        background-color: white;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        height: 5vh;
-        transition: background-color 0.2s ease;
-    }
+
+.cell {
+    position: absolute;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #586470;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+}
+
+.cell.hover{
+    transform: scale(1.1);
+    z-index: 2;
 }

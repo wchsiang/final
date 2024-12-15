@@ -23,7 +23,7 @@ times.forEach(time => {
 
     // 每天的空白課表單元格
     for (let i = 0; i < days.length; i++) {
-        row.innerHTML += `<div class="day-cell"></div>`;
+        row.innerHTML += `<div class="day-cell" id=${days[i]}${time}></div>`;
     }
 
     // 將行添加到課表中
@@ -64,7 +64,8 @@ toggleBtns.forEach((btn, index) => {
 document.addEventListener('click', (event) => {
     if (!event.target.classList.contains('right-btn') && 
         !event.target.closest('.sidebar') && 
-        !event.target.closest('#overlay')) {
+        !event.target.closest('#overlay') &&
+        !event.target.classList.contains('cell')) {
         closeAllSidebars();
         activeIndex = null; // 重置狀態
     }
@@ -250,18 +251,93 @@ const updateOptions = (newOptions, parentPath = "") => {
         });
     });
 };
+function show_pop(course, isAdd){
+    const lecture_info = JSON.parse(course.getAttribute('data-content'));
+    console.log(lecture_info);
+    document.getElementById("overlay").style.display = "flex";
+    let popup_body = document.getElementById("popup");
+    popup_body.innerHTML = "<span id='close' onclick='close_popup()'>X</span>";
+    popup_body.innerHTML += "<div class='popup_body'>課程名稱：" + lecture_info.cos_name 
+        + `&nbsp;<span class='brief' onclick='brief_pop(${lecture_info.cos_id})'>課程綱要</span><br>`
+        + "課程代號：" + lecture_info.cos_id + "<br>"
+        + "摘要：" + lecture_info.brief + "<br>"
+        + "開課教師：" + lecture_info.teacher + "<br>"
+        + "開課時間：" + lecture_info.cos_time + "<br>"
+        + "人數上限：" + lecture_info.num_limit + "<br>"
+        + "修課別：" + lecture_info.cos_type + "<br>"
+        + "修課時數：" + lecture_info.cos_hours + "<br>"
+        + "學分數：" + lecture_info.cos_credit + "<br>"
+        + "備註：" + lecture_info.memo + "<br>"
+        + "</div>"
+    if(isAdd)
+        popup_body.innerHTML += `<div class='popup_footer'><button onclick='add_course(${JSON.stringify(lecture_info)})'>加入課表</button></div>`;
+    else
+        popup_body.innerHTML += `<div class='popup_footer'><button onclick='remove_course(${JSON.stringify(lecture_info)})'>移出課表</button></div>`;
+}
 function brief_pop(cos_id){
     window.open(`https://timetable.nycu.edu.tw/?r=main/crsoutline&Acy=113&Sem=2&CrsNo=${cos_id}&lang=zh-tw`, '_blank');
 }
-// let lectureButtons = document.querySelectorAll('.lecture-btn');
-// lectureButtons.forEach(button => {
-//     button.addEventListener('click', () => {
-//         console.log("hello");
-//         document.getElementById("overlay").style.display = "display";
-//     });
-// });
-function add_course(){
-    console.log("hi");
+
+function add_course(cos_info){
+    close_popup();
+    const pattern = /([MTWRFSU])([zy1234n56789abcd]+)-?/g;
+    let matches = new Set();;
+    let match;
+    while ((match = pattern.exec(cos_info.cos_time)) !== null) {
+        const dayCode = match[1];        // 星期代碼
+        const number = match[2];          // 時間段數字
+        // 將星期代碼轉換為縮寫
+        const dayIndex = "MTWRFSU".indexOf(dayCode);
+        const day = days[dayIndex];
+    
+        // 將時間段代碼轉換為對應的數字
+        for(let i = 0; i < number.length; i++){
+            let timeIndex  = "zy1234n56789abcd".indexOf(number[i]);
+            let timeNumber = times[timeIndex]
+            matches.add(`${day}${timeNumber}`);
+        }        
+    }
+    console.log(cos_info);
+    matches.forEach(match => {
+        const base = document.getElementById(match);
+        const cell = document.createElement('span');
+        cell.className = 'cell';
+        cell.classList.add(`cos_id_${cos_info.cos_id}`);
+        cell.setAttribute('data-content', JSON.stringify(cos_info));
+        cell.onmouseenter = function() {
+            mouse_enter(cos_info.cos_id);
+        };
+        cell.onmouseleave = function() {
+            mouse_leave(cos_info.cos_id);
+        };
+        cell.onclick = function() {
+            show_pop(this, false);
+        }
+        cell.style.height = `${base.offsetHeight}px`;
+        cell.style.width = `${base.offsetWidth}px`;
+        let lines = cos_info.cos_name.split('\n');
+        let name = lines[0];
+        if(name.length > 10){
+            name = lines[0].substring(0,10) + "...";
+        }
+        cell.textContent = name;
+        base.appendChild(cell);
+    });
+}
+
+function remove_course(cos_info){
+
+}
+function mouse_enter(cos_id){
+    document.querySelectorAll(`.cos_id_${cos_id}`).forEach(cell =>{
+        cell.classList.add('hover');
+    })
+}
+
+function mouse_leave(cos_id){
+    document.querySelectorAll(`.cos_id_${cos_id}`).forEach(cell =>{
+        cell.classList.remove('hover');
+    })
 }
 
 function close_popup(){
@@ -298,7 +374,9 @@ function printOption(result){
     result.forEach(r => {
         let lecture = document.createElement('div');
         lecture.className = 'lecture-btn';
-        // console.log(r);
+        lecture.onclick = function() {
+            show_pop(this, true);
+        };
         lecture.setAttribute('data-content', JSON.stringify(r));
         const lecture_name = document.createElement('p');
         lecture_name.className = 'first_line';
@@ -326,31 +404,7 @@ function printOption(result){
         lectures.appendChild(lecture);
         
     })
-    console.log(result);                 
-    let lectureButtons = document.querySelectorAll('.lecture-btn');
-    lectureButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const lecture_info = JSON.parse(button.getAttribute('data-content'));
-            console.log(lecture_info);
-            document.getElementById("overlay").style.display = "flex";
-            let popup_body = document.getElementById("popup");
-            popup_body.innerHTML = "<span id='close' onclick='close_popup()'>X</span>";
-            popup_body.innerHTML += "<div class='popup_body'>課程名稱：" + lecture_info.cos_name 
-                + `&nbsp;<span class='brief' onclick='brief_pop(${lecture_info.cos_id})'>課程綱要</span><br>`
-                + "課程代號：" + lecture_info.cos_id + "<br>"
-                + "摘要：" + lecture_info.brief + "<br>"
-                + "開課教師：" + lecture_info.teacher + "<br>"
-                + "開課時間：" + lecture_info.cos_time + "<br>"
-                + "人數上限：" + lecture_info.num_limit + "<br>"
-                + "修課別：" + lecture_info.cos_type + "<br>"
-                + "修課時數：" + lecture_info.cos_hours + "<br>"
-                + "學分數：" + lecture_info.cos_credit + "<br>"
-                + "備註：" + lecture_info.memo + "<br>"
-                + "</div>"
-                + "<div class='popup_footer'><button onclick='add_course()'>加入課表</button></div>";
-        });
-    });
-    console.log(lectureButtons);
+    console.log(result);
 }
 
 // 回上一頁功能
