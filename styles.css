@@ -73,6 +73,7 @@ h1 {
     position: relative;
     height: 7vh;
     transition: background-color 0.2s ease;
+    z-index: 0;
 }
 
 .day-cell:hover {
@@ -429,6 +430,8 @@ h1 {
     transform: scale(1.1);
     z-index: 100;
     display: flex;
+    background-color: rgb(64, 168, 171);
+
 }
 
 .float_course {
@@ -439,9 +442,11 @@ h1 {
     justify-content: center;
     width: 100%;
     height: 100%;
-    background-color: #586470;
+    border-radius: 5px;
+    background-color: rgb(170, 146, 234);
     color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+    border: 1px solid lightgray;
 }
 
 .float_overlap{
