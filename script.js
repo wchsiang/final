@@ -327,12 +327,12 @@ function add_course(cos_info){
         cell.classList.add(`cos_id_${cos_info.cos_id}`);
         cell.classList.add('float_course');
         cell.setAttribute('data-content', JSON.stringify(cos_info));
-        cell.style.bottom = `${0+count*10}%`;
-        cell.style.left = `${0+count*5}%`;
-        if (count % 2 === 1){
-            cell.style.backgroundColor = 'rgb(99, 70, 179)';
-        }else
-            cell.style.backgroundColor = 'rgb(64, 168, 171)';
+        cell.style.bottom = `${0+count*12}%`;
+        cell.style.left = `${0+count*7}%`;
+        // if (count % 2 === 1){
+        //     cell.style.backgroundColor = 'rgb(99, 70, 179)';
+        // }else
+        //     cell.style.backgroundColor = 'rgb(64, 168, 171)';
         cell.onmouseenter = function() {
             mouse_enter(cos_info.cos_id);
         };
@@ -372,14 +372,46 @@ function add_to_database(cos_info){
 
 function remove_course(cos_info){
     selected_course.delete(cos_info.cos_id);
-    printSelect(selected_course)
+    document.querySelectorAll(`.cos_id_${cos_info.cos_id}`).forEach(cell =>{
+        cell.remove();
+    })
+
+    const pattern = /([MTWRFSU])([zy1234n56789abcd]+)-?/g;
+    let matches = new Set();
+    let match;
+    while ((match = pattern.exec(cos_info.cos_time)) !== null) {
+        const dayCode = match[1];        // 星期代碼
+        const number = match[2];          // 時間段數字
+        const dayIndex = "MTWRFSU".indexOf(dayCode);
+        const day = days[dayIndex];
+    
+        // 將時間段代碼轉換為對應的數字
+        for(let i = 0; i < number.length; i++){
+            let timeIndex  = "zy1234n56789abcd".indexOf(number[i]);
+            let timeNumber = times[timeIndex]
+            matches.add(`${day}${timeNumber}`);
+        }
+    }
+    matches.forEach(match => {
+        const elements = document.querySelectorAll(`.cosT${match}`);
+        let i = 0;
+        elements.forEach(element =>{
+            element.style.bottom = `${0+i*12}%`;
+            element.style.left = `${0+i*7}%`;
+            // if (i % 2 === 1){
+            //     element.style.backgroundColor = 'rgb(99, 70, 179)';
+            // }else
+            //     element.style.backgroundColor = 'rgb(64, 168, 171)';
+            i = i + 1;
+        })
+    })
+    printSelect(selected_course);
     close_popup();
 }
 
 function mouse_enter(cos_id){
     document.querySelectorAll(`.cos_id_${cos_id}`).forEach(cell =>{
         cell.classList.add('hover');
-        // cell.style.display = 'flex';
     })
 }
 
