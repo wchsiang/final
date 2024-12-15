@@ -270,9 +270,9 @@ function show_pop(course, isAdd){
         + "備註：" + lecture_info.memo + "<br>"
         + "</div>"
     if(isAdd)
-        popup_body.innerHTML += `<div class='popup_footer'><button onclick='add_course(${JSON.stringify(lecture_info)})'>加入課表</button></div>`;
+        popup_body.innerHTML += `<div class='popup_footer'><button onclick='add_course(${JSON.stringify(lecture_info)}); add_to_database(${JSON.stringify(lecture_info)})'>加入課表</button></div>`;
     else
-        popup_body.innerHTML += `<div class='popup_footer'><button onclick='remove_course(${JSON.stringify(lecture_info)})'>移出課表</button></div>`;
+        popup_body.innerHTML += `<div class='popup_footer'><button onclick='remove_course(${JSON.stringify(lecture_info)}))'>移出課表</button></div>`;
 }
 function brief_pop(cos_id){
     window.open(`https://timetable.nycu.edu.tw/?r=main/crsoutline&Acy=113&Sem=2&CrsNo=${cos_id}&lang=zh-tw`, '_blank');
@@ -322,6 +322,24 @@ function add_course(cos_info){
         }
         cell.textContent = name;
         base.appendChild(cell);
+    });
+}
+
+function add_to_database(cos_info){
+    console.log("cos_info: ", JSON.stringify(cos_info));
+    fetch('add_to_database.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cos_info)
+    })
+    .then(response => response.text())
+    .then(result => {
+        console.log(result);
+    })
+    .catch(error => {
+        console.error("Error:", error);
     });
 }
 
