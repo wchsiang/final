@@ -243,41 +243,7 @@ const updateOptions = (newOptions, parentPath = "") => {
                 })
                 .then(response => response.json())
                 .then(result => {
-                    lectures.innerHTML = "";
-                    result.forEach(r => {
-                        let lecture = document.createElement('div');
-                        lecture.className = 'lecture-btn';
-                        lecture.onclick = function() {
-                            show_pop(this, true);
-                        };
-                        lecture.setAttribute('data-content', JSON.stringify(r));
-                        const lecture_name = document.createElement('p');
-                        lecture_name.className = 'first_line';
-                        var lines = r.cos_name.split('\n');
-                        lecture_name.textContent = r.cos_id + " " + lines[0];
-                        lecture.appendChild(lecture_name);
-                        const lecture_time = document.createElement('div');   
-                        lecture_time.className = 'second_line'; 
-                        lecture_time.textContent = r.cos_time;
-                        const lecture_type = document.createElement('span');
-                        lecture_type.className = 'cos_type';
-                        if(r.cos_type == "必修"){
-                            lecture_type.classList.add('green');
-                        }
-                        if(r.cos_type == "選修"){
-                            lecture_type.classList.add('blue');
-                        }
-                        lecture_type.textContent = r.cos_type;
-                        lecture_time.appendChild(lecture_type);
-                        lecture.appendChild(lecture_time);
-                        const teacher = document.createElement('p');
-                        teacher.className = 'third_line';
-                        teacher.textContent = r.teacher + " · " + r.cos_credit + "學分";
-                        lecture.appendChild(teacher);
-                        lectures.appendChild(lecture);
-                        
-                    })
-                    console.log(result);
+                    printOption(result);
                 })
                 .catch(error => {
                     console.error("Error:", error);
@@ -380,7 +346,88 @@ function close_popup(){
 }
 
 function confirmSearch(){
-    // TODO
+    const keyword = document.getElementById("search-input").value;
+    if (keyword == "")
+        return;
+    sidebars[0].classList.remove('active');
+    sidebars[1].classList.add('active');
+    toggleBtns[0].classList.remove('active');
+    toggleBtns[1].classList.add('active');
+    activeIndex = 1;
+    fetch('keyword.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'data=' + encodeURIComponent(keyword)
+    })
+    .then(response => response.json())
+    .then(result => {
+        printOption(result);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
+
+function printOption(result){
+    lectures.innerHTML = "";
+    result.forEach(r => {
+        let lecture = document.createElement('div');
+        lecture.className = 'lecture-btn';
+        // console.log(r);
+        lecture.setAttribute('data-content', JSON.stringify(r));
+        const lecture_name = document.createElement('p');
+        lecture_name.className = 'first_line';
+        var lines = r.cos_name.split('\n');
+        lecture_name.textContent = r.cos_id + " " + lines[0];
+        lecture.appendChild(lecture_name);
+        const lecture_time = document.createElement('div');   
+        lecture_time.className = 'second_line'; 
+        lecture_time.textContent = r.cos_time;
+        const lecture_type = document.createElement('span');
+        lecture_type.className = 'cos_type';
+        if(r.cos_type == "必修"){
+            lecture_type.classList.add('green');
+        }
+        if(r.cos_type == "選修"){
+            lecture_type.classList.add('blue');
+        }
+        lecture_type.textContent = r.cos_type;
+        lecture_time.appendChild(lecture_type);
+        lecture.appendChild(lecture_time);
+        const teacher = document.createElement('p');
+        teacher.className = 'third_line';
+        teacher.textContent = r.teacher + " · " + r.cos_credit + "學分";
+        lecture.appendChild(teacher);
+        lectures.appendChild(lecture);
+        
+    })
+    console.log(result);                 
+    let lectureButtons = document.querySelectorAll('.lecture-btn');
+    lectureButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const lecture_info = JSON.parse(button.getAttribute('data-content'));
+            console.log(lecture_info);
+            document.getElementById("overlay").style.display = "flex";
+            let popup_body = document.getElementById("popup");
+            popup_body.innerHTML = "<span id='close' onclick='close_popup()'>X</span>";
+            popup_body.innerHTML += "<div class='popup_body'>課程名稱：" + lecture_info.cos_name 
+                + `&nbsp;<span class='brief' onclick='brief_pop(${lecture_info.cos_id})'>課程綱要</span><br>`
+                + "課程代號：" + lecture_info.cos_id + "<br>"
+                + "摘要：" + lecture_info.brief + "<br>"
+                + "開課教師：" + lecture_info.teacher + "<br>"
+                + "開課時間：" + lecture_info.cos_time + "<br>"
+                + "人數上限：" + lecture_info.num_limit + "<br>"
+                + "修課別：" + lecture_info.cos_type + "<br>"
+                + "修課時數：" + lecture_info.cos_hours + "<br>"
+                + "學分數：" + lecture_info.cos_credit + "<br>"
+                + "備註：" + lecture_info.memo + "<br>"
+                + "</div>"
+                + "<div class='popup_footer'><button onclick='add_course()'>加入課表</button></div>";
+        });
+    });
+    console.log(lectureButtons);
 }
 
 // 回上一頁功能
@@ -405,5 +452,4 @@ restartBtn.addEventListener('click', () => {
     searchInput.style.display = "flex";
 });
 
-// 初始化
 updateOptions(initoptions);
