@@ -1,0 +1,300 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: lightgray;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    width: 800px;
+    height: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 1s ease-in-out;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.form-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login .welcome-text {
+    width: 100%;
+    background: black;
+    color: white;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    text-align: left;
+    font-size: 1.2rem;
+    padding: 20px;
+    clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%);
+    opacity: 1;
+    z-index: 2;
+}
+
+.signup .welcome-text {
+    width: 100%;
+    background: black;
+    color: white;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    text-align: right;
+    font-size: 1.2rem;
+    padding: 20px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%);
+    opacity: 0;
+    z-index: 0;
+}
+
+.container.flipped .login .welcome-text {
+    animation: clipTransition1 1s ease-in-out forwards;
+}
+
+.container.flipped .signup .welcome-text {
+    animation: clipTransition2 1s ease-in-out forwards;
+}
+
+.container.flipped-back .login .welcome-text {
+    animation: clipTransition4 1s ease-in-out forwards;
+}
+
+.container.flipped-back .signup .welcome-text {
+    animation: clipTransition3 1s ease-in-out forwards;
+}
+
+.container.flipped .login form {
+    animation: textFadeOut 1s ease-in-out forwards;
+}
+
+.container.flipped .signup form {
+    animation: textFadeIn 1s ease-in-out forwards;
+}
+
+.container.flipped-back .login form {
+    animation: textFadeIn 1s ease-in-out forwards;
+}
+
+.container.flipped-back .signup form {
+    animation: textFadeOut 1s ease-in-out forwards;
+}
+
+.login form {
+    opacity: 1;
+    z-index: 1;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.signup form {
+    opacity: 1;
+    z-index: 1;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+@keyframes clipTransition1 {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%);
+        opacity: 1; 
+        z-index: 2;
+    }
+    90% {
+        z-index: 2;
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        opacity: 0;
+        z-index: 0;
+    }
+}
+
+@keyframes clipTransition2 {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        opacity: 0;
+        z-index: 0;
+    }
+    90% {
+        z-index: 2;
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%);
+        opacity: 1;
+        z-index: 2;
+    }
+}
+
+@keyframes clipTransition3 {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%);
+        opacity: 1;
+        z-index: 2;
+    }
+    90% {
+        z-index: 2;
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        opacity: 0;
+        z-index: 0;
+    }
+}
+
+@keyframes clipTransition4 {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        opacity: 0;
+        z-index: 0;
+    }
+    90% {
+        z-index: 2;
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%);
+        opacity: 1;
+        z-index: 2;
+    }
+}
+
+@keyframes textFadeOut {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    10% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+}
+
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    10% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+.login h1{
+    margin-bottom: 15px;
+    margin-left: 20px;
+}
+
+.signup h1{
+    margin-bottom: 15px;
+    margin-right: 20px;
+}
+
+h2 {
+    margin-bottom: 15px;
+}
+
+.input-group {
+    position: relative;
+    width: 80%;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    padding-left: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+button {
+    background: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    background: gray;
+}
+
+p {
+    font-size: 0.9rem;
+}
+
+.toggle {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#notification {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    opacity: 0; 
+    transition: all 0.5s;
+}
+
+#notification.message {
+    background-color: #4caf50;
+}
+
+#notification.error {
+    background-color: #f44336;
+}
+
+#notification.show {
+    top: 20px; 
+    opacity: 1; 
+}
