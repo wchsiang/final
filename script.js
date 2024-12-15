@@ -86,6 +86,7 @@ const options = document.getElementById("options");
 const backBtn = document.getElementById("back-btn");
 const restartBtn = document.getElementById("restart-btn");
 const btnGrid = document.getElementById("back-rst-btn-grid");
+const searchInput = document.getElementById("search-container");
 
 const initoptions = ["學士班課程", "研究所課程", "學士班共同課程", "其他課程", "學分學程", "跨域學程", "教育學程"];
 const optionsData = {
@@ -221,6 +222,7 @@ const updateOptions = (newOptions, parentPath = "") => {
                 historyStack.push({ options: newOptions, path: parentPath }); // 紀錄當前層級的選項與路徑
                 updateOptions(childOptions, selectedOption); // 使用完整路徑進行更新
                 btnGrid.style.display = "grid";
+                searchInput.style.display = "none";
             }
             else{
                 //把selectedOption傳入php
@@ -337,6 +339,10 @@ function close_popup(){
     document.getElementById("overlay").style.display = "none";
 }
 
+function confirmSearch(){
+    // TODO
+}
+
 // 回上一頁功能
 backBtn.addEventListener('click', () => {
     if (historyStack.length > 0) {
@@ -346,6 +352,7 @@ backBtn.addEventListener('click', () => {
         // 如果已經是最初的選項，隱藏回上一頁按鈕
         if (historyStack.length === 0) {
             btnGrid.style.display = "none";
+            searchInput.style.display = "flex";
         }
     }
 });
@@ -355,6 +362,7 @@ restartBtn.addEventListener('click', () => {
     updateOptions(initoptions);
     historyStack = [];
     btnGrid.style.display = "none";
+    searchInput.style.display = "flex";
 });
 
 // 初始化
