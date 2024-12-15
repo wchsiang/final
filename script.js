@@ -251,7 +251,9 @@ const updateOptions = (newOptions, parentPath = "") => {
         });
     });
 };
-function show_pop(course, isAdd){
+
+let selected_course = new Map();
+function show_pop(course){
     const lecture_info = JSON.parse(course.getAttribute('data-content'));
     console.log(lecture_info);
     document.getElementById("overlay").style.display = "flex";
@@ -269,19 +271,21 @@ function show_pop(course, isAdd){
         + "學分數：" + lecture_info.cos_credit + "<br>"
         + "備註：" + lecture_info.memo + "<br>"
         + "</div>"
-    if(isAdd)
-        popup_body.innerHTML += `<div class='popup_footer'><button onclick='add_course(${JSON.stringify(lecture_info)})'>加入課表</button></div>`;
-    else
+    if(selected_course.has(lecture_info.cos_id))
         popup_body.innerHTML += `<div class='popup_footer'><button onclick='remove_course(${JSON.stringify(lecture_info)})'>移出課表</button></div>`;
+    else
+        popup_body.innerHTML += `<div class='popup_footer'><button onclick='add_course(${JSON.stringify(lecture_info)}); add_to_database(${JSON.stringify(lecture_info)})'>加入課表</button></div>`;
 }
 function brief_pop(cos_id){
     window.open(`https://timetable.nycu.edu.tw/?r=main/crsoutline&Acy=113&Sem=2&CrsNo=${cos_id}&lang=zh-tw`, '_blank');
 }
 
 function add_course(cos_info){
+    selected_course.set(cos_info.cos_id, cos_info);
+    printSelect(selected_course);
     close_popup();
     const pattern = /([MTWRFSU])([zy1234n56789abcd]+)-?/g;
-    let matches = new Set();;
+    let matches = new Set();
     let match;
     while ((match = pattern.exec(cos_info.cos_time)) !== null) {
         const dayCode = match[1];        // 星期代碼
@@ -332,8 +336,28 @@ function add_course(cos_info){
     });
 }
 
-function remove_course(cos_info){
+function add_to_database(cos_info){
+    console.log("cos_info: ", JSON.stringify(cos_info));
+    fetch('add_to_database.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cos_info)
+    })
+    .then(response => response.text())
+    .then(result => {
+        console.log(result);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
 
+function remove_course(cos_info){
+    selected_course.delete(cos_info.cos_id);
+    printSelect(selected_course)
+    close_popup();
 }
 
 function mouse_enter(cos_id){
@@ -384,7 +408,7 @@ function printOption(result){
         let lecture = document.createElement('div');
         lecture.className = 'lecture-btn';
         lecture.onclick = function() {
-            show_pop(this, true);
+            show_pop(this);
         };
         lecture.setAttribute('data-content', JSON.stringify(r));
         const lecture_name = document.createElement('p');
@@ -412,6 +436,44 @@ function printOption(result){
         lecture.appendChild(teacher);
         lectures.appendChild(lecture);
         
+    })
+    console.log(result);
+}
+
+const selects = document.getElementById('selects');
+function printSelect(result){
+    selects.innerHTML = "";
+    result.forEach((r, _) => {
+        let lecture = document.createElement('div');
+        lecture.className = 'lecture-btn';
+        lecture.onclick = function() {
+            show_pop(this);
+        };
+        lecture.setAttribute('data-content', JSON.stringify(r));
+        const lecture_name = document.createElement('p');
+        lecture_name.className = 'first_line';
+        var lines = r.cos_name.split('\n');
+        lecture_name.textContent = r.cos_id + " " + lines[0];
+        lecture.appendChild(lecture_name);
+        const lecture_time = document.createElement('div');   
+        lecture_time.className = 'second_line'; 
+        lecture_time.textContent = r.cos_time;
+        const lecture_type = document.createElement('span');
+        lecture_type.className = 'cos_type';
+        if(r.cos_type == "必修"){
+            lecture_type.classList.add('green');
+        }
+        if(r.cos_type == "選修"){
+            lecture_type.classList.add('blue');
+        }
+        lecture_type.textContent = r.cos_type;
+        lecture_time.appendChild(lecture_type);
+        lecture.appendChild(lecture_time);
+        const teacher = document.createElement('p');
+        teacher.className = 'third_line';
+        teacher.textContent = r.teacher + " · " + r.cos_credit + "學分";
+        lecture.appendChild(teacher);
+        selects.appendChild(lecture);
     })
     console.log(result);
 }
