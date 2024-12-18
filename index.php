@@ -19,7 +19,9 @@
             <span id="close">X</span>
         </div>
     </div>
-
+    <div id="time-filter" onclick="timeFilter()">
+        <img src="img/time.png"><img>
+    </div>
     <div id="sidebar-container">
         <div class="right-btn active" id="toggle-btn1">搜尋</div>
         <div class="sidebar" id="sidebar1">

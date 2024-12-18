@@ -288,10 +288,23 @@ function show_pop(course){
         + "學分數：" + lecture_info.cos_credit + "<br>"
         + "備註：" + lecture_info.memo + "<br>"
         + "</div>"
-    if(selected_course.has(lecture_info.cos_id))
-        popup_body.innerHTML += `<div class='popup_footer'><button onclick='remove_course(${JSON.stringify(lecture_info)}); remove_from_database(${JSON.stringify(lecture_info)})'>移出課表</button></div>`;
-    else
-        popup_body.innerHTML += `<div class='popup_footer'><button onclick='add_course(${JSON.stringify(lecture_info)}); add_to_database(${JSON.stringify(lecture_info)})'>加入課表</button></div>`;
+    if(selected_course.has(lecture_info.cos_id)){
+        popup_body.innerHTML += 
+            `<div class='popup_footer'>
+                <button class="rmv" onclick='remove_course(${JSON.stringify(lecture_info)}); remove_from_database(${JSON.stringify(lecture_info)})'>
+                    移出課表
+                </button>
+            </div>`;
+    }
+    else{
+        popup_body.innerHTML +=
+            `<div class='popup_footer'>
+                <button class="add" onclick='add_course(${JSON.stringify(lecture_info)}); add_to_database(${JSON.stringify(lecture_info)})'>
+                    加入課表
+                </button>
+            </div>`;
+    }
+        
 }
 function brief_pop(cos_id){
     window.open(`https://timetable.nycu.edu.tw/?r=main/crsoutline&Acy=113&Sem=2&CrsNo=${cos_id}&lang=zh-tw`, '_blank');
@@ -543,6 +556,44 @@ function printSelect(result){
         selects.appendChild(lecture);
     })
     console.log(result);
+}
+
+const timeblocks = document.querySelectorAll('.day-cell');
+let isFilter = false;
+function timeFilter(){
+    if(!isFilter){
+        isFilter = true;
+        timeblocks.forEach(block => {
+            block.innerHTML = "";
+            block.style.cursor = "pointer";
+            block.onclick = function(){
+                set_time(block);
+            }
+        });
+    }
+    else{
+        isFilter = false;
+        timeblocks.forEach(block => {
+            block.innerHTML = "";
+            block.classList.remove('selected');
+            block.style.cursor = "default";
+            block.onclick = null;
+        });
+        selected_course.forEach(course => {
+            add_course(course);
+        });
+
+    }
+    
+}
+
+function set_time(block){
+    if(!block.classList.contains("selected")){
+        block.classList.add('selected');
+    }
+    else{
+        block.classList.remove('selected');
+    }
 }
 
 // 回上一頁功能
