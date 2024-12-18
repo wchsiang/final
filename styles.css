@@ -239,10 +239,10 @@ h1 {
 .logout{
     cursor: pointer;
     position: fixed;
-    right: 2%;
-    top: 8%;
-    height: 6%;
-    width: 3%;
+    right: 20px;
+    top: 5%;
+    height: 50px;
+    width: 50px;
     transition: transform 0.2s ease;
     border-radius: 10%;
 }
@@ -252,16 +252,18 @@ h1 {
     transform-origin: center;
 }
 
-#time-filter img{
+#time-filter{
     position: fixed;
-    top: 8%;
-    right: 7%;
-    height: 6%;
-    width: 3%;
+    top: 5%;
+    right: 90px;
+    height: 50px;
+    width: 50px;
+    z-index: 10000;
+    border: none;
 }
 
-#time-filter:hover img{
-    cursor: pointer;;
+#time-filter:hover{
+    cursor: pointer;
     transform: scale(1.1);
 }
 
@@ -572,5 +574,25 @@ h1 {
         font-size: 0.5rem;
         width: 20px;
         height: 70px;
+    }
+    .logout{
+        cursor: pointer;
+        position: fixed;
+        right: 1vw;
+        top: 3%;
+        height: 8vw;
+        width: 8vw;
+        transition: transform 0.2s ease;
+        border-radius: 10%;
+        z-index: 10000;
+    }
+    #time-filter{
+        position: fixed;
+        top: 3%;
+        right: 9vw;
+        height: 8vw;
+        width: 8vw;
+        z-index: 10000;
+        border: none;
     }
 }

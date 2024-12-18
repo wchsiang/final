@@ -576,8 +576,10 @@ function printSelect(result){
 
 const timeblocks = document.querySelectorAll('.day-cell');
 let isFilter = false;
+const timefiler = document.getElementById("time-filter");
 function timeFilter(){
     if(!isFilter){
+        timefiler.src = "./img/unlock.png";
         isFilter = true;
         timeblocks.forEach(block => {
             block.innerHTML = "";
@@ -588,6 +590,7 @@ function timeFilter(){
         });
     }
     else{
+        timefiler.src = "./img/lock.png";
         isFilter = false;
         for (let i = 0; i < days.length; i++){
             for (let j = 0; j < times.length; j++){
@@ -629,12 +632,6 @@ function set_filter(block){
         gif.onclick = function(){
             remove_filter(block);
         }
-        gif.onload = function () {
-            setTimeout(() => {
-                gif.src = "img/check.png";
-            }, 3000);
-        };
-
         block.appendChild(gif);
     }
 }
@@ -674,4 +671,8 @@ restartBtn.addEventListener('click', () => {
     searchInput.style.display = "flex";
 });
 
+window.addEventListener('pageshow', function(event){
+    if (event.persisted)
+        location.reload();
+})
 updateOptions(initoptions);
