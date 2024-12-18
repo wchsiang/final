@@ -118,7 +118,7 @@ if($time_str == ''){
     }
 }
 else{
-    $results = [];$pattern = '/([MTWRFSU][yz1234n56789abcd]+)[-]/';
+    $results = [];$pattern = '/([MTWRFSU][yz1234n56789abcd]+)+[-]/';
     if ($result->num_rows > 0) {    
         while ($row = $result->fetch_assoc()) {
             $filter = 1;
