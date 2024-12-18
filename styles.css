@@ -81,7 +81,16 @@ h1 {
 }
 
 .day-cell.selected {
-    background-color: #dfe6e9;
+    border-color: white;
+}
+
+.day-cell img {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
 }
 
 /* Right button styles */
@@ -230,10 +239,8 @@ h1 {
 .logout{
     cursor: pointer;
     position: fixed;
+    right: 2%;
     top: 8%;
-    right: 10%;
-    height: 6%;
-    width: 3%;
     height: 6%;
     width: 3%;
     transition: transform 0.2s ease;
@@ -243,6 +250,19 @@ h1 {
 .logout:hover{
     transform: rotateY(180deg);
     transform-origin: center;
+}
+
+#time-filter img{
+    position: fixed;
+    top: 8%;
+    right: 7%;
+    height: 6%;
+    width: 3%;
+}
+
+#time-filter:hover img{
+    cursor: pointer;;
+    transform: scale(1.1);
 }
 
 #search-input {
@@ -492,20 +512,6 @@ h1 {
     justify-content: center;
     width: 100%;
     height: 100%;
-}
-
-#time-filter img{
-    position: fixed;
-    top: 8%;
-    right: 5%;
-    height: 6%;
-    width: 3%;
-    border-radius: 10%;
-}
-
-#time-filter:hover img{
-    cursor: pointer;;
-    transform: scale(1.1);
 }
 
 @media (min-device-width : 320px) and (max-device-width : 480px) {
