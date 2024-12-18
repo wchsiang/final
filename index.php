@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <img src="img/logout.jpg" onclick="logout()" class="logout">
+
     <div id="overlay">
         <div id="popup">
             <span id="close">X</span>
@@ -49,7 +51,7 @@
         <div id="timetable-grid">
             <!-- 動態生成的課表將插入這裡 -->
         </div>
-    </div>
+    </div>    
 
     <script src="script.js"></script>
 
