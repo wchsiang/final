@@ -65,7 +65,7 @@ document.addEventListener('click', (event) => {
     if (!event.target.classList.contains('right-btn') && 
         !event.target.closest('.sidebar') && 
         !event.target.closest('#overlay') &&
-        !event.target.classList.contains('cell')) {
+        !event.target.classList.contains('float_course')) {
         closeAllSidebars();
         activeIndex = null; // 重置狀態
     }
