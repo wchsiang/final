@@ -3,7 +3,22 @@ require_once 'db.php';
 
 $all_params = $_POST['data'] ?? '';
 
-$parts = explode("/", $all_params);
+$path_time = explode("@", $all_params);
+$time_str = $path_time[1];
+$parts = explode("/", $path_time[0]);
+// $parts = explode("/", $all_params);
+
+$is_select = [];
+$day_l = "MTWRFSU";
+$time_l = "yz1234n56789abcd";
+for($i = 0; $i < strlen($day_l); $i++){
+    for($j = 0; $j < strlen($time_l); $j++){
+        $is_select[$i][$j] = 0;
+    }
+}
+for($i = 0; $i < strlen($time_str); $i+=2){
+    $is_select[strpos($day_l, $time_str[$i])][strpos($time_l, $time_str[$i+1])] = 1;
+}
 
 if($parts[0] == "學士班課程" || $parts[0] == "研究所課程"){
     $category = $parts[1] ?? '';
@@ -91,24 +106,44 @@ elseif($parts[0] == "教育學程"){
     }
 }
 
-// $cos_time = $_POST['cos_time'] ?? '';
-
-// $sql = "SELECT * FROM $table WHERE cos_id = ? AND category = ? AND college = ? 
-//         AND dep like CONCAT('%', ?, '%') AND SUBSTRING_INDEX(cos_time, '-', 1) = ?";
-
-// $stmt->bind_param("isss", $cos_id, $category, $college, $dep);
-
 $stmt->execute();
 
 $result = $stmt->get_result();
-
-$results = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $row["table_info"] = $table_info;
-        $results[] = $row;
+if($time_str == ''){
+    if ($result->num_rows > 0) {    
+        while ($row = $result->fetch_assoc()) {
+            $row["table_info"] = $table_info;
+            $results[] = $row;
+    }
     }
 }
+else{
+    $results = [];$pattern = '/([MTWRFSU][yz1234n56789abcd]+)[-]/';
+    if ($result->num_rows > 0) {    
+        while ($row = $result->fetch_assoc()) {
+            $filter = 1;
+            $cos_time = $row['cos_time'];        
+            preg_match_all($pattern, $cos_time, $matches);
+            foreach($matches[0] as $match){            
+                for ($x = 1; $x < strlen($match); $x++) {
+                    if ($match[$x] == '-'){
+                        continue;
+                    }
+                    if($is_select[strpos($day_l, $match[0])][strpos($time_l, $match[$x])] == 0){
+                        $filter = 0;
+                        continue;
+                    }
+                }    
+            }
+            if($filter == 1){
+                $row["table_info"] = $table_info;
+                $results[] = $row;
+            }
+        }
+    }
+}
+
+
 
 $stmt->close();
 $conn->close();

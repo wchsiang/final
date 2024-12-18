@@ -217,7 +217,6 @@ const updateOptions = (newOptions, parentPath = "") => {
         button.addEventListener('click', () => {
             const selectedOption = button.getAttribute('data-content'); // 取得完整路徑
             const childOptions = optionsData[selectedOption] || []; // 根據名稱查找子選項
-
             if (childOptions.length > 0) {
                 historyStack.push({ options: newOptions, path: parentPath }); // 紀錄當前層級的選項與路徑
                 updateOptions(childOptions, selectedOption); // 使用完整路徑進行更新
@@ -226,6 +225,18 @@ const updateOptions = (newOptions, parentPath = "") => {
             }
             else{
                 //把selectedOption傳入php
+                let day_l = "MTWRFSU";
+                let time_l = "yz1234n56789abcd";
+                let time_str = "";
+                for (let i = 0; i < days.length; i++){
+                    for (let j = 0; j < times.length; j++){
+                        if(is_select[i][j]){
+                            time_str += day_l[i] + time_l[j];
+                        }
+                    }
+                }
+                console.log(time_str);
+                let append_str = selectedOption + '@' + time_str;
 
                 sidebars[0].classList.remove('active');
                 sidebars[1].classList.add('active');
@@ -238,7 +249,7 @@ const updateOptions = (newOptions, parentPath = "") => {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: 'data=' + encodeURIComponent(selectedOption)
+                    body: 'data=' + encodeURIComponent(append_str)
                 })
                 .then(response => response.json())
                 .then(result => {
@@ -261,6 +272,7 @@ document.addEventListener("DOMContentLoaded", function() {
         selected_course.clear();
         result.forEach(element => {
             selected_course.set(element.cos_id, element);
+            add_course(element);
         });
         printSelect(selected_course);
     })
@@ -287,10 +299,23 @@ function show_pop(course){
         + "學分數：" + lecture_info.cos_credit + "<br>"
         + "備註：" + lecture_info.memo + "<br>"
         + "</div>"
-    if(selected_course.has(lecture_info.cos_id))
-        popup_body.innerHTML += `<div class='popup_footer'><button onclick='remove_course(${JSON.stringify(lecture_info)})'>移出課表</button></div>`;
-    else
-        popup_body.innerHTML += `<div class='popup_footer'><button onclick='add_course(${JSON.stringify(lecture_info)}); add_to_database(${JSON.stringify(lecture_info)})'>加入課表</button></div>`;
+    if(selected_course.has(lecture_info.cos_id)){
+        popup_body.innerHTML += 
+            `<div class='popup_footer'>
+                <button class="rmv" onclick='remove_course(${JSON.stringify(lecture_info)}); remove_from_database(${JSON.stringify(lecture_info)})'>
+                    移出課表
+                </button>
+            </div>`;
+    }
+    else{
+        popup_body.innerHTML +=
+            `<div class='popup_footer'>
+                <button class="add" onclick='add_course(${JSON.stringify(lecture_info)}); add_to_database(${JSON.stringify(lecture_info)})'>
+                    加入課表
+                </button>
+            </div>`;
+    }
+        
 }
 function brief_pop(cos_id){
     window.open(`https://timetable.nycu.edu.tw/?r=main/crsoutline&Acy=113&Sem=2&CrsNo=${cos_id}&lang=zh-tw`, '_blank');
@@ -300,7 +325,7 @@ function add_course(cos_info){
     selected_course.set(cos_info.cos_id, cos_info);
     printSelect(selected_course);
     close_popup();
-    const pattern = /([MTWRFSU])([zy1234n56789abcd]+)-?/g;
+    const pattern = /([MTWRFSU])([yz1234n56789abcd]+)-?/g;
     let matches = new Set();
     let match;
     while ((match = pattern.exec(cos_info.cos_time)) !== null) {
@@ -312,7 +337,7 @@ function add_course(cos_info){
     
         // 將時間段代碼轉換為對應的數字
         for(let i = 0; i < number.length; i++){
-            let timeIndex  = "zy1234n56789abcd".indexOf(number[i]);
+            let timeIndex  = "yz1234n56789abcd".indexOf(number[i]);
             let timeNumber = times[timeIndex]
             matches.add(`${day}${timeNumber}`);
         }
@@ -370,13 +395,36 @@ function add_to_database(cos_info){
     });
 }
 
+function remove_from_database(cos_info){
+    console.log("cos_info: ", JSON.stringify(cos_info));
+    fetch('remove_from_database.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cos_info)
+    })
+    .then(response => response.text())
+    .then(result => {
+        console.log(result);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
+
+function logout(){
+    document.cookie = "student_id" + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "login_index.php";
+}
+
 function remove_course(cos_info){
     selected_course.delete(cos_info.cos_id);
     document.querySelectorAll(`.cos_id_${cos_info.cos_id}`).forEach(cell =>{
         cell.remove();
     })
 
-    const pattern = /([MTWRFSU])([zy1234n56789abcd]+)-?/g;
+    const pattern = /([MTWRFSU])([yz1234n56789abcd]+)-?/g;
     let matches = new Set();
     let match;
     while ((match = pattern.exec(cos_info.cos_time)) !== null) {
@@ -387,7 +435,7 @@ function remove_course(cos_info){
     
         // 將時間段代碼轉換為對應的數字
         for(let i = 0; i < number.length; i++){
-            let timeIndex  = "zy1234n56789abcd".indexOf(number[i]);
+            let timeIndex  = "yz1234n56789abcd".indexOf(number[i]);
             let timeNumber = times[timeIndex]
             matches.add(`${day}${timeNumber}`);
         }
@@ -524,6 +572,84 @@ function printSelect(result){
         selects.appendChild(lecture);
     })
     console.log(result);
+}
+
+const timeblocks = document.querySelectorAll('.day-cell');
+let isFilter = false;
+function timeFilter(){
+    if(!isFilter){
+        isFilter = true;
+        timeblocks.forEach(block => {
+            block.innerHTML = "";
+            block.style.cursor = "pointer";
+            block.onclick = function(){
+                set_filter(block);
+            }
+        });
+    }
+    else{
+        isFilter = false;
+        for (let i = 0; i < days.length; i++){
+            for (let j = 0; j < times.length; j++){
+                is_select[i][j] = false;
+            }
+        }
+        timeblocks.forEach(block => {
+            block.innerHTML = "";
+            block.classList.remove('selected');
+            block.style.cursor = "default";
+            block.onclick = null;
+        });
+        selected_course.forEach(course => {
+            add_course(course);
+        });
+
+    }
+    
+}
+
+let is_select = new Array(days.length);
+for (let i = 0; i < days.length; i++) {
+    is_select[i] = new Array(times.length);
+}
+for (let i = 0; i < days.length; i++){
+    for (let j = 0; j < times.length; j++){
+        is_select[i][j] = false;
+    }
+}
+function set_filter(block){
+    if(!block.classList.contains("selected")){
+        block.classList.add('selected');
+        let d = block.id.substring(0,3);
+        let t = block.id.substring(3,4);
+        is_select[days.indexOf(d)][times.indexOf(t)] = true;
+        const gif = document.createElement("img");
+        gif.src = "img/check.gif?" + new Date().getTime(); // 確保每次載入新 GIF
+        gif.alt = "Animation";
+        gif.onclick = function(){
+            remove_filter(block);
+        }
+        gif.onload = function () {
+            setTimeout(() => {
+                gif.src = "img/check.png";
+            }, 3000);
+        };
+
+        block.appendChild(gif);
+    }
+}
+function remove_filter(block){
+    const existingGif = block.querySelector("img");
+    let d = block.id.substring(0,3);
+    let t = block.id.substring(3,4);
+    is_select[days.indexOf(d)][times.indexOf(t)] = false;
+    if (existingGif) {
+        existingGif.remove();
+    }
+    setTimeout(() => {
+        block.classList.remove('selected');
+    }, 500);
+    
 }
 
 // 回上一頁功能
