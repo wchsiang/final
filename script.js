@@ -402,6 +402,11 @@ function remove_from_database(cos_info){
     });
 }
 
+function logout(){
+    document.cookie = "student_id" + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "login_index.php";
+}
+
 function remove_course(cos_info){
     selected_course.delete(cos_info.cos_id);
     document.querySelectorAll(`.cos_id_${cos_info.cos_id}`).forEach(cell =>{
