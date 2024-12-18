@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <img src="img/logout.jpg" onclick="logout()" class="logout">
+    <img src="img/exit.png" onclick="logout()" class="logout">
 
     <div id="overlay">
         <div id="popup">

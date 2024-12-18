@@ -572,7 +572,7 @@ function timeFilter(){
             block.innerHTML = "";
             block.style.cursor = "pointer";
             block.onclick = function(){
-                set_time(block);
+                set_filter(block);
             }
         });
     }
@@ -592,13 +592,33 @@ function timeFilter(){
     
 }
 
-function set_time(block){
+function set_filter(block){
     if(!block.classList.contains("selected")){
         block.classList.add('selected');
+        const gif = document.createElement("img");
+        gif.src = "img/check.gif?" + new Date().getTime(); // 確保每次載入新 GIF
+        gif.alt = "Animation";
+        gif.onclick = function(){
+            remove_filter(block);
+        }
+        gif.onload = function () {
+            setTimeout(() => {
+                gif.src = "img/check.png";
+            }, 3000);
+        };
+
+        block.appendChild(gif);
     }
-    else{
+}
+function remove_filter(block){
+    const existingGif = block.querySelector("img");
+    if (existingGif) {
+        existingGif.remove();
+    }
+    setTimeout(() => {
         block.classList.remove('selected');
-    }
+    }, 500);
+    
 }
 
 // 回上一頁功能
