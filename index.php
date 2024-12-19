@@ -10,7 +10,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timetable</title>
+    <title>課表</title>
+    <link rel="icon" href="./img/book.png" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
